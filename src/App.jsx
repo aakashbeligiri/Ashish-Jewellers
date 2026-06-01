@@ -168,7 +168,20 @@ const handleLogin = () => {
 const handleLogout = () => {
   setIsAdminLoggedIn(false);
 };
+const getProductImage = (imageUrl) => {
+  if (imageUrl.includes("-")) {
+    return `http://localhost:5232/Uploads/${imageUrl}`;
+  }
 
+  const localImages = {
+    "necklace.jpg": necklaceImage,
+    "ring.jpg": ringImage,
+    "bridal.jpg": bridalImage,
+    "bangles.jpg": banglesImage,
+  };
+
+  return localImages[imageUrl];
+};
   return (
    
     <div className="site">
@@ -314,11 +327,7 @@ const handleLogout = () => {
            
           <div className="card" key={product.id}>
             <img
-  src={
-    product.imageUrl.includes("-")
-      ? `http://localhost:5232/Uploads/${product.imageUrl}`
-      : `/src/assets/${product.imageUrl}`
-  }
+  src={getProductImage(product.imageUrl)}
   alt={product.name}
   className="card-image"
 />
