@@ -9,7 +9,40 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 function App() {
-  const [products, setProducts] = useState([]);
+ const [products, setProducts] = useState([
+  {
+    id: 1,
+    name: "Gold Necklace",
+    category: "Gold",
+    price: 55000,
+    description: "Elegant 22K gold necklace design",
+    imageUrl: "necklace.jpg",
+  },
+  {
+    id: 2,
+    name: "Diamond Ring",
+    category: "Diamond",
+    price: 25000,
+    description: "Premium diamond ring for special moments",
+    imageUrl: "ring.jpg",
+  },
+  {
+    id: 3,
+    name: "Bridal Set",
+    category: "Bridal",
+    price: 150000,
+    description: "Traditional bridal jewellery collection",
+    imageUrl: "bridal.jpg",
+  },
+  {
+    id: 4,
+    name: "Bangles",
+    category: "Gold",
+    price: 45000,
+    description: "Beautiful gold bangles for every occasion",
+    imageUrl: "bangles.jpg",
+  },
+]);
   const [editingProductId, setEditingProductId] = useState(null);
   const [searchText, setSearchText] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
