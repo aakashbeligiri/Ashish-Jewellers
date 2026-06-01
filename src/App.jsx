@@ -1,0 +1,398 @@
+import "./App.css";
+import heroImage from "./assets/hero.jpg";
+
+import necklaceImage from "./assets/necklace.jpg";
+import ringImage from "./assets/ring.jpg";
+import bridalImage from "./assets/bridal.jpg";
+import banglesImage from "./assets/bangles.jpg";
+import { useEffect, useState } from "react";
+import axios from "axios";
+
+function App() {
+  const [products, setProducts] = useState([]);
+  const [editingProductId, setEditingProductId] = useState(null);
+  const [searchText, setSearchText] = useState("");
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
+
+const [loginData, setLoginData] = useState({
+  username: "",
+  password: "",
+});
+const [newProduct, setNewProduct] = useState({
+  
+  name: "",
+  category: "",
+  price: "",
+  description: "",
+  imageUrl: "necklace.jpg",
+});
+useEffect(() => {
+  axios
+    .get("http://localhost:5232/api/products")
+    .then((response) => {
+      setProducts(response.data);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+}, []);
+const addProduct = () => {
+  axios
+    .post("http://localhost:5232/api/products", {
+      ...newProduct,
+      price: Number(newProduct.price),
+    })
+    .then((response) => {
+      setProducts([...products, response.data]);
+      setNewProduct({
+        name: "",
+        category: "",
+        price: "",
+        description: "",
+        imageUrl: "necklace.jpg",
+      });
+    });
+};
+
+const deleteProduct = (id) => {
+  axios
+    .delete(`http://localhost:5232/api/products/${id}`)
+    .then(() => {
+      setProducts(products.filter((product) => product.id !== id));
+    });
+};
+
+const updateProduct = () => {
+  axios
+    .put(`http://localhost:5232/api/products/${editingProductId}`, {
+      ...newProduct,
+      id: editingProductId,
+      price: Number(newProduct.price),
+    })
+    .then((response) => {
+      setProducts(
+        products.map((product) =>
+          product.id === editingProductId ? response.data : product
+        )
+      );
+
+      setNewProduct({
+        name: "",
+        category: "",
+        price: "",
+        description: "",
+        imageUrl: "necklace.jpg",
+      });
+
+      setEditingProductId(null);
+    });
+};
+
+const uploadImage = () => {
+  if (!selectedFile) {
+    alert("Please select an image first");
+    return;
+  }
+
+  console.log("Selected file:", selectedFile);
+
+  const formData = new FormData();
+  formData.append("file", selectedFile);
+
+  axios
+    .post("http://localhost:5232/api/upload", formData)
+    .then((response) => {
+      console.log("Upload response:", response.data);
+
+      setNewProduct({
+        ...newProduct,
+        imageUrl: response.data.imageUrl,
+      });
+
+      alert("Image uploaded successfully");
+    })
+    .catch((error) => {
+      console.error("Upload error:", error);
+      alert("Image upload failed");
+    });
+};
+
+const filteredProducts = products.filter((product) =>
+  product.name.toLowerCase().includes(searchText.toLowerCase()) ||
+  product.category.toLowerCase().includes(searchText.toLowerCase()) ||
+  product.description.toLowerCase().includes(searchText.toLowerCase())
+);
+const handleLogin = () => {
+  if (loginData.username === "admin" && loginData.password === "admin123") {
+    setIsAdminLoggedIn(true);
+    alert("Admin login successful");
+  } else {
+    alert("Invalid username or password");
+  }
+};
+
+const handleLogout = () => {
+  setIsAdminLoggedIn(false);
+};
+
+  return (
+   
+    <div className="site">
+      <nav className="navbar">
+        <h2>Ashish Jewellers</h2>
+        <div>
+         <a href="#home">Home</a>
+         <a href="#collections">Collections</a>
+         <a href="#about">About</a>
+         <a href="#contact">Contact</a>
+        </div>
+      </nav>
+
+      <section id="home" className="hero">
+        <img src={heroImage} alt="Jewellery" className="hero-image" />
+
+        <div className="hero-content">
+          
+          <h1>Timeless Jewellery for Every Occasion</h1>
+          <p>Explore premium gold, diamond, bridal and traditional collections.</p>
+
+          <div className="button-group">
+            <button>Explore Collection</button>
+
+            <a href="https://wa.me/919542298222" target="_blank" rel="noreferrer">
+              <button className="whatsapp-btn">WhatsApp</button>
+            </a>
+          </div>
+        </div>
+      </section>
+      <section className="login-section">
+  <h2>Admin Login</h2>
+
+  <input
+    type="text"
+    placeholder="Username"
+    value={loginData.username}
+    onChange={(e) =>
+      setLoginData({
+        ...loginData,
+        username: e.target.value,
+      })
+    }
+  />
+
+  <input
+    type="password"
+    placeholder="Password"
+    value={loginData.password}
+    onChange={(e) =>
+      setLoginData({
+        ...loginData,
+        password: e.target.value,
+      })
+    }
+  />
+
+  {isAdminLoggedIn ? (
+    <button onClick={handleLogout}>Logout</button>
+  ) : (
+    <button onClick={handleLogin}>Login</button>
+  )}
+</section>
+      
+      {isAdminLoggedIn && (
+  <section id="admin-form" className="admin-form">
+  <h2>{editingProductId ? "Edit Product" : "Add New Product"}</h2>
+  
+
+  <input
+    type="text"
+    placeholder="Product Name"
+    value={newProduct.name}
+    onChange={(e) =>
+      setNewProduct({ ...newProduct, name: e.target.value })
+    }
+  />
+
+  <input
+    type="text"
+    placeholder="Category"
+    value={newProduct.category}
+    onChange={(e) =>
+      setNewProduct({ ...newProduct, category: e.target.value })
+    }
+  />
+
+  <input
+    type="number"
+    placeholder="Price"
+    value={newProduct.price}
+    onChange={(e) =>
+      setNewProduct({ ...newProduct, price: e.target.value })
+    }
+  />
+
+  <input
+    type="text"
+    placeholder="Description"
+    value={newProduct.description}
+    onChange={(e) =>
+      setNewProduct({ ...newProduct, description: e.target.value })
+    }
+  />
+
+  <input
+    type="text"
+    placeholder="Image Name"
+    value={newProduct.imageUrl}
+    onChange={(e) =>
+      setNewProduct({ ...newProduct, imageUrl: e.target.value })
+    }
+  />
+<input
+  type="file"
+  onChange={(e) => setSelectedFile(e.target.files[0])}
+/>
+
+<button type="button" onClick={uploadImage}>
+  Upload Image
+</button>
+<button onClick={editingProductId ? updateProduct : addProduct}>
+  {editingProductId ? "Update Product" : "Add Product"}
+</button>
+</section>
+)}
+      <section id="collections" className="collections">
+  <h2>Our Collections</h2>
+  <input
+  type="text"
+  placeholder="Search jewellery..."
+  value={searchText}
+  onChange={(e) => setSearchText(e.target.value)}
+  className="search-box"
+/>
+
+  <h3>Total Products: {products.length}</h3>
+
+  <div className="cards">
+    {products.length > 0 ? (
+      filteredProducts.map((product) => {
+        return (
+           
+          <div className="card" key={product.id}>
+            <img
+  src={
+    product.imageUrl.includes("-")
+      ? `http://localhost:5232/Uploads/${product.imageUrl}`
+      : `/src/assets/${product.imageUrl}`
+  }
+  alt={product.name}
+  className="card-image"
+/>
+            <h3>{product.name}</h3>
+            <p>{product.category}</p>
+            <p>{product.description}</p>
+            <p>
+              <strong>₹{product.price}</strong>
+            </p>
+            <button>Enquire Now</button>
+            <button onClick={() => deleteProduct(product.id)}>
+  Delete
+</button>
+<button
+  onClick={() => {
+    setEditingProductId(product.id);
+    setNewProduct({
+      name: product.name,
+      category: product.category,
+      price: product.price,
+      description: product.description,
+      imageUrl: product.imageUrl,
+    });
+
+    document.getElementById("admin-form").scrollIntoView({
+      behavior: "smooth",
+    });
+  }}
+>
+  Edit
+</button>
+          </div>
+        );
+      })
+    ) : (
+      <p>Loading products...</p>
+    )}
+  </div>
+</section>
+
+      <section className="gallery">
+  <h2>Jewellery Gallery</h2>
+
+  <div className="gallery-grid">
+    <img src={necklaceImage} alt="Necklace" />
+    <img src={ringImage} alt="Ring" />
+    <img src={bridalImage} alt="Bridal" />
+    <img src={banglesImage} alt="Bangles" />
+  </div>
+</section>
+
+<section className="testimonials">
+  <h2>What Our Customers Say</h2>
+
+  <div className="testimonial-cards">
+    <div className="testimonial">
+      <p>"Beautiful designs and excellent quality. Highly recommended."</p>
+      <h4>- Priya S.</h4>
+    </div>
+
+    <div className="testimonial">
+      <p>"Best bridal jewellery collection with great customer service."</p>
+      <h4>- Anjali R.</h4>
+    </div>
+
+    <div className="testimonial">
+      <p>"Trusted jewellers with elegant gold and diamond designs."</p>
+      <h4>- Rohit K.</h4>
+    </div>
+  </div>
+</section>
+
+     <section id="about" className="about">
+  <h2>About Ashish Jewellers</h2>
+  <p>
+    Ashish Jewellers brings you elegant gold, diamond, bridal and traditional
+    jewellery crafted with trust, quality and timeless design.
+  </p>
+</section>
+
+<section id="contact" className="contact">
+  <h2>Contact Us</h2>
+  <p>📞 +91 9542298222</p>
+  <p>📧 ashishjewellers@gmail.com</p>
+  <p>📍  Mayur Kushal Complex, Abids Road, Gun Foundry, Abids, Hyderabad, Telangana 500001, India</p>
+</section>
+<footer className="footer">
+  <h3>Ashish Jewellers</h3>
+
+  <p>✨ Trusted Jewellery Since 2005</p>
+
+  <p>© 2026 Ashish Jewellers. All Rights Reserved.</p>
+</footer>
+
+<a
+  href="https://wa.me/919542298222"
+  target="_blank"
+  rel="noreferrer"
+  className="floating-whatsapp"
+>
+  💬
+</a>
+
+    </div>
+  );
+}
+
+export default App;
+
+
