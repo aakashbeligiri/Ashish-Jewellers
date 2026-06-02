@@ -7,6 +7,7 @@ import bridalImage from "./assets/bridal.jpg";
 import banglesImage from "./assets/bangles.jpg";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import whatsappIcon from "./assets/whatsapp.png";
 
 function App() {
  const [products, setProducts] = useState([
@@ -445,7 +446,7 @@ const isAdminPage =
   target="_blank"
   rel="noreferrer"
 >
-  WhatsApp
+  <img src={whatsappIcon} alt="WhatsApp" />
 </a>
 
     </div>
