@@ -21,19 +21,47 @@ body {
 }
 
 .navbar {
+  height: 90px;
+  background: #ffffff;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 24px 80px;
-  background: #fffefd;
-  color: #000;
+  justify-content: center;
+  position: relative;
+  border-bottom: 1px solid #eee;
+  padding: 0 45px;
 }
 
-.navbar a {
-  margin-left: 28px;
-  color: #000;
+.brand-logo {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 42px;
+  font-weight: 500;
+  color: #111;
+  letter-spacing: 1px;
+}
+
+.nav-left,
+.nav-right {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+
+.nav-left {
+  left: 45px;
+}
+
+.nav-right {
+  right: 45px;
+}
+
+.menu-icon,
+.user-icon,
+.nav-icon {
+  font-size: 30px;
+  color: #111;
   text-decoration: none;
-  font-size: 18px;
+  cursor: pointer;
 }
 
 .hero {
@@ -100,24 +128,55 @@ body {
 }
 
 @media (max-width: 768px) {
-  .navbar,
+
   .hero {
     flex-direction: column;
     padding: 30px;
+    gap: 30px;
+  }
+
+  .navbar {
+    height: 80px;
+    padding: 0 15px;
+  }
+
+  .brand-logo {
+    font-size: 24px;
+    text-align: center;
+  }
+
+  .nav-left {
+    left: 15px;
+    gap: 12px;
+  }
+
+  .nav-right {
+    right: 15px;
+    gap: 12px;
+  }
+
+  .menu-icon,
+  .user-icon,
+  .nav-icon {
+    font-size: 22px;
+  }
+
+  .hero-image {
+    width: 280px;
   }
 
   .hero h1 {
     font-size: 32px;
   }
 
-  .hero-image {
-    width: 280px;
+  .hero p {
+    font-size: 18px;
   }
-}
 
   .card h3 {
-  margin-top: 0;
-  font-size: 22px;
+    margin-top: 0;
+    font-size: 22px;
+  }
 }
 
 .card p {

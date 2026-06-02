@@ -188,15 +188,19 @@ const isAdminPage =
   return (
    
     <div className="site">
-      <nav className="navbar">
-        <h2>Ashish Jewellers</h2>
-        <div>
-         <a href="#home">Home</a>
-         <a href="#collections">Collections</a>
-         <a href="#about">About</a>
-         <a href="#contact">Contact</a>
-        </div>
-      </nav>
+    <nav className="navbar">
+  <div className="nav-left">
+    <span className="menu-icon">☰</span>
+    <span className="user-icon">♡</span>
+  </div>
+
+  <div className="brand-logo">Ashish Jewellers</div>
+
+  <div className="nav-right">
+    <a href="#collections" className="nav-icon">⌕</a>
+    <a href="#collections" className="nav-icon">⌂</a>
+  </div>
+</nav>
 
       <section id="home" className="hero">
         <img src={heroImage} alt="Jewellery" className="hero-image" />
