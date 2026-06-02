@@ -182,6 +182,8 @@ const getProductImage = (imageUrl) => {
 
   return localImages[imageUrl];
 };
+const isAdminPage =
+  window.location.pathname.toLowerCase() === "/admin";
   return (
    
     <div className="site">
@@ -212,7 +214,8 @@ const getProductImage = (imageUrl) => {
           </div>
         </div>
       </section>
-      <section className="login-section">
+      {isAdminPage && (
+<section className="login-section">
   <h2>Admin Login</h2>
 
   <input
@@ -245,7 +248,7 @@ const getProductImage = (imageUrl) => {
     <button onClick={handleLogin}>Login</button>
   )}
 </section>
-      
+  )}
       {isAdminLoggedIn && (
   <section id="admin-form" className="admin-form">
   <h2>{editingProductId ? "Edit Product" : "Add New Product"}</h2>
