@@ -439,6 +439,15 @@ const isAdminPage =
   💬
 </a>
 
+<a
+  href="https://wa.me/919542298222"
+  className="floating-whatsapp"
+  target="_blank"
+  rel="noreferrer"
+>
+  WhatsApp
+</a>
+
     </div>
   );
 }
