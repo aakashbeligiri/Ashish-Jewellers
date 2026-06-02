@@ -8,6 +8,7 @@ import banglesImage from "./assets/bangles.jpg";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import whatsappIcon from "./assets/whatsapp.png";
+import { Menu, Store, Heart, User } from "lucide-react";
 
 function App() {
  const [products, setProducts] = useState([
@@ -188,17 +189,35 @@ const isAdminPage =
   return (
    
     <div className="site">
-    <nav className="navbar">
+  <nav className="navbar">
   <div className="nav-left">
-    <span className="menu-icon">☰</span>
-    <span className="user-icon">♡</span>
+    <span className="menu-icon">
+      <Menu size={30} />
+    </span>
+
+    <input
+      type="text"
+      placeholder="Search..."
+      className="navbar-search"
+      value={searchText}
+      onChange={(e) => setSearchText(e.target.value)}
+    />
   </div>
 
   <div className="brand-logo">Ashish Jewellers</div>
 
   <div className="nav-right">
-    <a href="#collections" className="nav-icon">⌕</a>
-    <a href="#collections" className="nav-icon">⌂</a>
+    <a href="/" className="nav-icon">
+      <Store size={30} />
+    </a>
+
+    <a href="#" className="nav-icon">
+      <Heart size={30} />
+    </a>
+
+    <a href="/admin" className="nav-icon">
+      <User size={30} />
+    </a>
   </div>
 </nav>
 
