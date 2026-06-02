@@ -338,27 +338,32 @@ const getProductImage = (imageUrl) => {
               <strong>₹{product.price}</strong>
             </p>
             <button>Enquire Now</button>
-            <button onClick={() => deleteProduct(product.id)}>
-  Delete
-</button>
-<button
-  onClick={() => {
-    setEditingProductId(product.id);
-    setNewProduct({
-      name: product.name,
-      category: product.category,
-      price: product.price,
-      description: product.description,
-      imageUrl: product.imageUrl,
-    });
+            {isAdminLoggedIn && (
+  <>
+    <button onClick={() => deleteProduct(product.id)}>
+      Delete
+    </button>
 
-    document.getElementById("admin-form").scrollIntoView({
-      behavior: "smooth",
-    });
-  }}
->
-  Edit
-</button>
+    <button
+      onClick={() => {
+        setEditingProductId(product.id);
+        setNewProduct({
+          name: product.name,
+          category: product.category,
+          price: product.price,
+          description: product.description,
+          imageUrl: product.imageUrl,
+        });
+
+        document.getElementById("admin-form").scrollIntoView({
+          behavior: "smooth",
+        });
+      }}
+    >
+      Edit
+    </button>
+  </>
+)}
           </div>
         );
       })
