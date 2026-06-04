@@ -9,8 +9,31 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import whatsappIcon from "./assets/whatsapp.png";
 import { Menu, Store, Heart, User } from "lucide-react";
+import ramSlide from "./assets/Slides/ram.jpg";
+import coupleSlide from "./assets/Slides/couplering.jpg";
+import bridalSlide from "./assets/Slides/bridal.jpg";
+import earringsSlide from "./assets/Slides/earrings.jpg";
+import casualSlide from "./assets/Slides/casual.jpg";
 
 function App() {
+
+  const heroSlides = [
+  ramSlide,
+  coupleSlide,
+  bridalSlide,
+  earringsSlide,
+  casualSlide,
+];
+
+const [currentSlide, setCurrentSlide] = useState(0);
+
+useEffect(() => {
+  const interval = setInterval(() => {
+    setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
+  }, 3000);
+
+  return () => clearInterval(interval);
+}, []);
  const [products, setProducts] = useState([
   {
     id: 1,
@@ -221,23 +244,16 @@ const isAdminPage =
   </div>
 </nav>
 
-      <section id="home" className="hero">
-        <img src={heroImage} alt="Jewellery" className="hero-image" />
-
-        <div className="hero-content">
-          
-          <h1>Timeless Jewellery for Every Occasion</h1>
-          <p>Explore premium gold, diamond, bridal and traditional collections.</p>
-
-          <div className="button-group">
-            <button>Explore Collection</button>
-
-            <a href="https://wa.me/919542298222" target="_blank" rel="noreferrer">
-              <button className="whatsapp-btn">WhatsApp</button>
-            </a>
-          </div>
-        </div>
-      </section>
+   <section id="home" className="hero-slider">
+  {heroSlides.map((slide, index) => (
+    <img
+      key={index}
+      src={slide}
+      alt="Jewellery Collection"
+      className={`slider-image ${index === currentSlide ? "active" : ""}`}
+    />
+  ))}
+</section>
       {isAdminPage && (
 <section className="login-section">
   <h2>Admin Login</h2>
