@@ -26,14 +26,17 @@ function App() {
 ];
 
 const [currentSlide, setCurrentSlide] = useState(0);
+const [isSliderPaused, setIsSliderPaused] = useState(false);
 
 useEffect(() => {
+  if (isSliderPaused) return;
+
   const interval = setInterval(() => {
     setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
   }, 3000);
 
   return () => clearInterval(interval);
-}, []);
+}, [isSliderPaused]);
  const [products, setProducts] = useState([
   {
     id: 1,
@@ -244,15 +247,51 @@ const isAdminPage =
   </div>
 </nav>
 
-   <section id="home" className="hero-slider">
+<section
+  id="home"
+  className="hero-slider"
+  onMouseEnter={() => setIsSliderPaused(true)}
+  onMouseLeave={() => setIsSliderPaused(false)}
+>
   {heroSlides.map((slide, index) => (
     <img
       key={index}
       src={slide}
       alt="Jewellery Collection"
+      loading={index === 0 ? "eager" : "lazy"}
       className={`slider-image ${index === currentSlide ? "active" : ""}`}
     />
   ))}
+
+  <button
+    className="slider-arrow left-arrow"
+    onClick={() =>
+      setCurrentSlide(
+        (currentSlide - 1 + heroSlides.length) % heroSlides.length
+      )
+    }
+  >
+    ‹
+  </button>
+
+  <button
+    className="slider-arrow right-arrow"
+    onClick={() =>
+      setCurrentSlide((currentSlide + 1) % heroSlides.length)
+    }
+  >
+    ›
+  </button>
+
+  <div className="slider-dots">
+    {heroSlides.map((_, index) => (
+      <button
+        key={index}
+        className={`slider-dot ${index === currentSlide ? "active-dot" : ""}`}
+        onClick={() => setCurrentSlide(index)}
+      ></button>
+    ))}
+  </div>
 </section>
       {isAdminPage && (
 <section className="login-section">
@@ -353,13 +392,6 @@ const isAdminPage =
 )}
       <section id="collections" className="collections">
   <h2>Our Collections</h2>
-  <input
-  type="text"
-  placeholder="Search jewellery..."
-  value={searchText}
-  onChange={(e) => setSearchText(e.target.value)}
-  className="search-box"
-/>
 
   <h3>Total Products: {products.length}</h3>
 
